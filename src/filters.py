@@ -1,5 +1,6 @@
 import numpy as np
-from scipy.signal import butter, filtfilt
+import pandas as pd
+from scipy.signal import butter, filtfilt, medfilt
 
 def butter_lowpass_filter(data, cutoff, fs, order=4):
     """
@@ -20,9 +21,28 @@ def butter_lowpass_filter(data, cutoff, fs, order=4):
     y = filtfilt(b, a, data)
     return y
 
+def remove_outliers_median(data, kernel_size=3):
+    """
+    Applies a median filter to remove spike noise.
+    
+    Args:
+        data (np.array): 1D array of data.
+        kernel_size (int): Size of the window (must be odd).
+        
+    Returns:
+        np.array: Filtered data.
+    """
+    if kernel_size % 2 == 0:
+        kernel_size += 1
+    return medfilt(data, kernel_size)
+
 def filter_dataframe(df, cutoff=6.0, fs=100.0, order=4, columns_to_filter=None):
     """
-    Applies the low-pass filter to specified columns in a DataFrame.
+    Applies outlier removal (median) and low-pass filter to specified columns in a DataFrame.
+    
+    Strategy:
+    1. Median Filter (to kill spikes)
+    2. Butterworth Low-Pass (to smooth)
     
     Args:
         df (pd.DataFrame): Dataframe containing the data.
@@ -42,11 +62,15 @@ def filter_dataframe(df, cutoff=6.0, fs=100.0, order=4, columns_to_filter=None):
     for col in columns_to_filter:
         # Check for NaNs and handle them (simple check)
         if df[col].isnull().any():
-            # Should have been interpolated before, but just in case
             continue 
             
         try:
-            df_filtered[col] = butter_lowpass_filter(df[col].values, cutoff, fs, order)
+            # 1. Median Filter for Outliers
+            # Using a small kernel size to remove single-frame spikes without distorting movement too much
+            data_despiked = remove_outliers_median(df[col].values, kernel_size=5)
+            
+            # 2. Low-Pass Filter for Smoothing
+            df_filtered[col] = butter_lowpass_filter(data_despiked, cutoff, fs, order)
         except Exception as e:
             print(f"Warning: Could not filter column {col}: {e}")
             
