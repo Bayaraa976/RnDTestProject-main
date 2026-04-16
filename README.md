@@ -51,8 +51,99 @@ A document explaining the algorithm
 Python-based project code and any unit test code used during development
 
 
+python .\client.py
+(.venv) PS C:\Users\e.bayaraa\Documents\datalab\agent\backend> python .\client.py 
+Show generated SQL and agent debug details? [Y/n]: Y
+Chat session started. Type /exit or /quit to end, /reset to start a new session.
+
+You > 2025 оны хамгийн өндөр ашигт ажиллагаатай компани
+
+→ POST http://localhost:8000/api/v1/chat/analyze-debug
+  session : [new]
+  horizon : [server default]
+  question: 2025 оны хамгийн өндөр ашигт ажиллагаатай компани
+
+[error] Could not reach http://localhost:8000/api/v1/chat/analyze-debug. Is the backend running?
+
+You > 2025 оны хамгийн өндөр ашигт ажиллагаатай компани
+
+→ POST http://localhost:8000/api/v1/chat/analyze-debug
+  session : [new]
+  horizon : [server default]
+  question: 2025 оны хамгийн өндөр ашигт ажиллагаатай компани
+
+[error] Could not reach http://localhost:8000/api/v1/chat/analyze-debug. Is the backend running?
+                                                         
+You > 
+You > 2025 оны хамгийн өндөр ашигт ажиллагаатай компани
+
+→ POST http://localhost:8000/api/v1/chat/analyze-debug
+  session : [new]
+  horizon : [server default]
+  question: 2025 оны хамгийн өндөр ашигт ажиллагаатай компани
+
+Response status: 200
+========================================================================
+DEBUG: GENERATED SQL QUERY
+========================================================================
+SELECT symbol, companyname, netmargin, netprofit, revenue, year
+FROM bdc_report_calculation
+WHERE year = 2025
+  AND netmargin IS NOT NULL
+ORDER BY netmargin DESC
+LIMIT 1
+
+Query Parameters:
+{}
+
+========================================================================
+DEBUG: Orchestration Decision
+========================================================================
+{
+  "orchestration_signal": "data",
+  "should_run_query": true,
+  "data_requirements": [
+    "revenue",
+    "netprofit",
+    "roa",
+    "roe",
+    "grossmargin",
+    "netmargin",
+    "ebitmargin",
+    "totalpayable",
+    "debtratio",
+    "debttoequityratio",
+    "financialleverage"
+  ],
+  "reason": "Financial data needed; send message to QueryAgent with required fields.",
+  "start_year": 2025,
+  "end_year": 2025,
+  "summarize_earnings_call": false,
+  "plain_english_for_teen": false
+}
+
+========================================================================
+  N/A  |  source years: [2025]
+========================================================================
+# Монгол нэхмэл (MNH) – 2025 оны санхүүгийн үзүүлэлт
+
+## Үндсэн дүнгээ
+
+FY2025 санаа: MNH нь **цэвэр ашигт ажиллагааны түвшин 46.85%** бүхий сайн үйл ажиллагаа явуулж байна. Цэвэр ашиг **224.2 сая MNT** байгаа.
+
 | Үзүүлэлт | Үнэ | Сэтгэгдэл |
 |---------|-----|---------|
 | Орлого (FY2025) | 4,786.0 сая MNT | Үндсэн үйл ажиллагаа |
 | Цэвэр ашигт ажиллагаа | 46.85% | Өндөр (⚠️ нэмэлт баланс, үйл ажиллагааны зардал алга) |
 | Цэвэр ашиг | 224.2 сая MNT | Цэвэр ашигт ажиллагаа × Орлого |
+
+## Сэтгэгдэл
+
+MNH-ийн цэвэр ашигт ажиллагааны түвшин 46.85% нь **өндөр** гэж үзэгдэж байгаа. Гэвч энэ дүнгээр өндөр үнэлгээ өгөхөөс өмнө дараахь хязгаарлалтуудыг тэмдэглэе:
+
+1.
+========================================================================
+
+You > 
+Session ended.
+
