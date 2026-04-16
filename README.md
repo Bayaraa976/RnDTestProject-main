@@ -49,3 +49,10 @@ A results report
 A document explaining the algorithm
 
 Python-based project code and any unit test code used during development
+
+
+| Үзүүлэлт | Үнэ | Сэтгэгдэл |
+|---------|-----|---------|
+| Орлого (FY2025) | 4,786.0 сая MNT | Үндсэн үйл ажиллагаа |
+| Цэвэр ашигт ажиллагаа | 46.85% | Өндөр (⚠️ нэмэлт баланс, үйл ажиллагааны зардал алга) |
+| Цэвэр ашиг | 224.2 сая MNT | Цэвэр ашигт ажиллагаа × Орлого |
